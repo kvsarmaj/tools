@@ -1,0 +1,75 @@
+#!/bin/bash 
+
+DIRS=`ls -l --time-style="long-iso" $PROJ_ROOT | egrep '^d' | awk '{print $8}'`
+echo " List of existing projects:"
+i=0
+for DIR in $DIRS; do
+    if [ "$DIR" != "include" ] && [ "$DIR" != "tools" ] && [ "$DIR" != "templates" ]; then
+	    i=$(($i+1))
+	    echo "    $i. ${DIR}"
+    fi
+done
+echo " Select a project by entering corresponding number (0 to create a new project): "
+
+read projsel
+#echo $projsel
+
+i=0
+if [ $projsel -ne 0 ]; then
+    for DIR in $DIRS; do
+	if [ "$DIR" != "include" ] && [ "$DIR" != "tools" ] && [ "$DIR" != "templates" ]; then
+	    i=$(($i+1))
+	    if [ $i -eq $projsel ]; then
+		echo "Selected project is ${DIR}"
+		break
+	    fi
+	fi
+    done
+elif [ $projsel -eq 0 ]; then
+    echo "Selected option is 0. Creating a new project"
+    echo "Enter the name of new project: "
+    read projname
+
+    echo $projname
+    
+    mkdir -p $PROJ_ROOT/$projname
+    mkdir -p $PROJ_ROOT/$projname/rtl
+    mkdir -p $PROJ_ROOT/$projname/tb
+    mkdir -p $PROJ_ROOT/$projname/sim
+    
+    cp $PROJ_ROOT/templates/Makefile.rtl.template /tmp/file
+    perl -pi -e s/unit/$projname/g /tmp/file
+    cp /tmp/file $PROJ_ROOT/$projname/rtl/Makefile
+    
+    cp $PROJ_ROOT/templates/Makefile.tb.template /tmp/file
+    perl -pi -e s/unit/$projname/g /tmp/file
+    cp /tmp/file $PROJ_ROOT/$projname/tb/Makefile
+    
+    cp $PROJ_ROOT/templates/Makefile.sim.template /tmp/file
+    perl -pi -e s/unit/$projname/g /tmp/file
+    cp /tmp/file $PROJ_ROOT/$projname/sim/Makefile
+    
+    cp $PROJ_ROOT/templates/sim.cpp.template $PROJ_ROOT/$projname/sim/sim.cpp
+    
+    cp $PROJ_ROOT/templates/unit.cpp.template /tmp/file
+    perl -pi -e s/unit/$projname/g /tmp/file
+    cp /tmp/file $PROJ_ROOT/$projname/rtl/$projname.cpp
+    
+    cp $PROJ_ROOT/templates/unit.cpp.template /tmp/file
+    perl -pi -e s/unit/$projname/g /tmp/file
+    cp /tmp/file $PROJ_ROOT/$projname/rtl/$projname.cpp
+    
+    cp $PROJ_ROOT/templates/unit_tb.cpp.template /tmp/file
+    perl -pi -e s/unit/$projname/g /tmp/file
+    cp /tmp/file $PROJ_ROOT/$projname/tb/$projname'_tb'.cpp
+    
+    cp $PROJ_ROOT/templates/unit.rtl.files.template /tmp/file
+    perl -pi -e s/unit/$projname/g /tmp/file
+    cp /tmp/file $PROJ_ROOT/$projname/rtl/$projname.rtl.files
+    
+    cp $PROJ_ROOT/templates/unit.tb.files.template /tmp/file
+    perl -pi -e s/unit/$projname/g /tmp/file
+    cp /tmp/file $PROJ_ROOT/$projname/tb/$projname.tb.files
+    
+fi
+
