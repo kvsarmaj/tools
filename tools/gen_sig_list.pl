@@ -9,7 +9,7 @@ use strict;
 use Data::Dumper;
 use Storable;
 
-my $proj_root = ""; #add your working directory path
+my $proj_root = $ENV{'PROJ_ROOT'};
 my $usage;
 my $dump_log;
 my $ifile;
