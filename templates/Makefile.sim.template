@@ -1,8 +1,0 @@
-PROJ_HOME = $(PROJ_ROOT)/unit
-PROJ_INC = -I${PROJ_ROOT)/unit/include -I$(PROJ_ROOT}/unit/tb -I$(PROJ_ROOT)/unit/rtl
-SIM_FILES = sim.cpp
-MOD = unit
-
-include $(PROJ_HOME)/rtl/Makefile
-include $(PROJ_HOME)/tb/Makefile
-include $(PROJ_ROOT)/include/Makefile
