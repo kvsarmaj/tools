@@ -118,3 +118,6 @@ if ! shopt -oq posix; then
     . /etc/bash_completion
   fi
 fi
+
+# Tab autocomplete doesnt work without this
+shopt -s direxpand
