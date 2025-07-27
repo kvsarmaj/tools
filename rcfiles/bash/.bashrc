@@ -57,9 +57,9 @@ if [ -n "$force_color_prompt" ]; then
 fi
 
 if [ "$color_prompt" = yes ]; then
-    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]: \[\033[01;34m\]\w\[\033[00m\]\$ '
 else
-    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
+    PS1='${debian_chroot:+($debian_chroot)}\u@\h: \w\$ '
 fi
 unset color_prompt force_color_prompt
 
@@ -93,6 +93,16 @@ alias lf='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
 
+# Defaults
+export GIT_EDITOR=vim
+
+# RISCV GCC newlib
+export PATH=$PATH:/opt/riscv/bin
+
+# Setup Git SSH
+eval "$(ssh-agent -s)"
+ssh-add ~/.ssh/id_ed25519
+
 # Add an "alert" alias for long running commands.  Use like so:
 #   sleep 10; alert
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
@@ -119,5 +129,8 @@ if ! shopt -oq posix; then
   fi
 fi
 
-# Tab autocomplete doesnt work without this
+# Tab autocompletion doesnt work without this
 shopt -s direxpand
+
+# Tab should list items in directory
+bind 'TAB:complete'
