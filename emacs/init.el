@@ -3,6 +3,7 @@
 ;;******************************************************************************
 
 ;; Author: Sarma Jonnavithula
+;; Last-Updated: Ashvayuja kRshNa navami, madhyAhnaM 13:00, parAbhava nAma samvatsaraM, SAlivAhana SakaM 1948 i.e., 3 Nov 2026 in Gregorian Calendar
 ;; Last-Updated: kArtika kRshNa navami, madhyAhnaM 11:20, krodhi nAma samvatsaraM, SAlivAhana SakaM 1946 i.e., 24 Nov 2024 in Gregorian Calendar
 ;; Last-Updated: Jyeshta krishna paksha tritiya, Madhyahnam 1:11, Hevalambi nama samvatsaram, Salivahana Sakam 1939 i.e., June 12th, 2017 in Gregorian Calendar
 
@@ -10,12 +11,12 @@
 
 ;; No Gurantees. Use it if you will.
 ;; However, if you find any problems if you can write back to me, it would be good
-;; I am reachable at vividvivek[AT]gmail[DOT]com
+;; I am reachable at sarma[DOT]jonnavithula[AT]valakhilya[DOT]in
 
 ;;; Author's Note:
 ;; This is a start-up file for emacs.
 ;; It covers some basic stuff required for ease in using emacs/xemacs
-;; I am and will be mostly using it for HDL Coding and Scripting
+;; I am and will be mostly using it for Verilog HDL Coding and Scripting
 ;; Therefore, this start-up is mostly suited for such purposes
 ;; Use it in conjunction with verilog-mode.el for better Verilog results
 ;; Modify any parameters that are pre-set accordingly
@@ -26,6 +27,13 @@
 ;;**********************************************************
 ;; Welcome message 
 ;;**********************************************************
+
+
+;; Added by Package.el.  This must come before configurations of
+;; installed packages.  Don't delete this line.  If you don't want it,
+;; just comment it out by adding a semicolon to the start of the line.
+;; You may delete these explanatory comments.
+(package-initialize)
 
 (defun startup-echo-area-message ()                           ; Configuring a sanskrit message
   "punah swAgataM .... parabrahmAya idaM na mama")
@@ -178,6 +186,24 @@
 (add-to-list 'auto-mode-alist '("\\.vh$" . verilog-mode))
 (add-to-list 'auto-mode-alist '("\\.sv$" . verilog-mode))
 (add-to-list 'auto-mode-alist '("\\.svh$" . verilog-mode))
+
+;;**********************************************************
+
+;;**********************************************************
+;; Add MELPA package manager
+;;**********************************************************
+;; We use regular MELPA channel instead of snapshots
+;; We will primarily use MELPA - at least at the moment - to
+;;  manage RTL development work. Hence we will use
+;;  Mike Olson's recommendations with gptel and minuet
+;; We will try to use open router API instead of a specific LLM
+;;  to leverage on the gateway's ability to choose LLM for us
+;; We want no customizations at the moment
+
+(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+(setq package-install-upgrade-built-in true)
+
+;; feature still not up. To be done
 
 ;;**********************************************************
 
@@ -348,7 +374,7 @@
 (set-foreground-color "white")
 
 (set-face-attribute 'default nil :font "Nimbus Mono PS Bold" )
-(set-face-attribute 'default (selected-frame) :height 140)
+(set-face-attribute 'default (selected-frame) :height 110)
 
 ;;**********************************************************
 
@@ -394,4 +420,12 @@
 ;;              display-time-day-and-date t                     ; Display the time and date on the mode line
 ;;              case-fold-search t                              ; Fold case on searches
 ;;              )
+;;**********************************************************
+
+
+;;**********************************************************
+;; Setup unicode
+;;**********************************************************
+(require 'unicode-fonts)
+(unicode-fonts-setup)
 ;;**********************************************************
