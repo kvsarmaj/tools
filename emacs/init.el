@@ -1,9 +1,11 @@
+;; -*- lexical-binding: t; -*-  
+
 ;;******************************************************************************
 ;;; init.el --- Sarma Jonnavithula's init.el File for GNU Emacs
 ;;******************************************************************************
 
 ;; Author: Sarma Jonnavithula
-;; Last-Updated: Ashvayuja kRshNa navami, madhyAhnaM 13:00, parAbhava nAma samvatsaraM, SAlivAhana SakaM 1948 i.e., 3 Nov 2026 in Gregorian Calendar
+;; Last-Updated: Ashviyuja kRshNa navami, madhyAhnaM 13:00, parAbhava nAma samvatsaraM, SAlivAhana SakaM 1948 i.e., 3 Nov 2026 in Gregorian Calendar
 ;; Last-Updated: kArtika kRshNa navami, madhyAhnaM 11:20, krodhi nAma samvatsaraM, SAlivAhana SakaM 1946 i.e., 24 Nov 2024 in Gregorian Calendar
 ;; Last-Updated: Jyeshta krishna paksha tritiya, Madhyahnam 1:11, Hevalambi nama samvatsaram, Salivahana Sakam 1939 i.e., June 12th, 2017 in Gregorian Calendar
 
@@ -29,17 +31,18 @@
 ;;**********************************************************
 
 
+(defun startup-echo-area-message ()                           ; Configuring a sanskrit message
+  "punah swAgataM .... parabrahmAya idaM na mama")
+;;Meaning of the message : Welcome Back .... For Parabrahma, this is not mine
+
+;;**********************************************************
+
 ;; Added by Package.el.  This must come before configurations of
 ;; installed packages.  Don't delete this line.  If you don't want it,
 ;; just comment it out by adding a semicolon to the start of the line.
 ;; You may delete these explanatory comments.
 (package-initialize)
 
-(defun startup-echo-area-message ()                           ; Configuring a sanskrit message
-  "punah swAgataM .... parabrahmAya idaM na mama")
-;;Meaning of the message : Welcome Back .... For Parabrahma, this is not mine
-
-;;**********************************************************
 
 ;;**********************************************************
 ;; Basics
@@ -186,24 +189,6 @@
 (add-to-list 'auto-mode-alist '("\\.vh$" . verilog-mode))
 (add-to-list 'auto-mode-alist '("\\.sv$" . verilog-mode))
 (add-to-list 'auto-mode-alist '("\\.svh$" . verilog-mode))
-
-;;**********************************************************
-
-;;**********************************************************
-;; Add MELPA package manager
-;;**********************************************************
-;; We use regular MELPA channel instead of snapshots
-;; We will primarily use MELPA - at least at the moment - to
-;;  manage RTL development work. Hence we will use
-;;  Mike Olson's recommendations with gptel and minuet
-;; We will try to use open router API instead of a specific LLM
-;;  to leverage on the gateway's ability to choose LLM for us
-;; We want no customizations at the moment
-
-(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
-(setq package-install-upgrade-built-in true)
-
-;; feature still not up. To be done
 
 ;;**********************************************************
 
@@ -365,7 +350,7 @@
 
 ;;**********************************************************
 ;; Set font
-;;  - I like Nimbus Mono PS Bold font
+;;  - I like Nimbus Mono Bold font
 ;;    Only problem I have with it is
 ;;     it takes a bit of effort to distinguish l and 1 
 ;;**********************************************************
@@ -373,8 +358,8 @@
 (set-background-color "black")
 (set-foreground-color "white")
 
-(set-face-attribute 'default nil :font "Nimbus Mono PS Bold" )
-(set-face-attribute 'default (selected-frame) :height 110)
+(set-face-attribute 'default nil :font "Nimbus Mono Bold" )
+(set-face-attribute 'default (selected-frame) :height 120)
 
 ;;**********************************************************
 
@@ -429,3 +414,73 @@
 (require 'unicode-fonts)
 (unicode-fonts-setup)
 ;;**********************************************************
+
+;;**********************************************************
+;; Add MELPA package manager
+;;**********************************************************
+;; We use regular MELPA channel instead of snapshots
+;; We will primarily use MELPA - at least at the moment - to
+;;  manage RTL development work. Hence we will use
+;;  Mike Olson's recommendations with gptel and minuet
+;; We will try to use open router API instead of a specific LLM
+;;  to leverage on the gateway's ability to choose LLM for us
+;; We want no customizations at the moment
+
+(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+(setq package-install-upgrade-built-in true)
+
+;; feature still not up. To be done
+
+;;**********************************************************
+
+;;;;**********************************************************
+;;;; Configuring minuet and gptel
+;;;;**********************************************************
+;;;; Taken from Mike Olson's recommendations
+;;;;  https://mwolson.org/blog/emacs/2025-12-03-my-emacs-ai-setup/
+;;;; I took most of this from Mike's page but may have added
+;;;;  or changed or removed some options over time
+;;
+;;;; Key points:
+;;;;  - single line completion suggestions
+;;;;  - wait time before suggestions appear
+;;;;  - cursor style single suggestions
+;;
+;;;;  - <Tab> for accept single line suggestion
+;;;;  - <C-c C-c> to insert all lines
+;;;;  - <C-g> Remove suggestion
+;;;;  - <C-n> and <C-p> for next and previous cycle through
+;;
+;;(with-eval-after-load "minuet"
+;;  (setopt minuet-add-single-line-entry nil
+;;          minuet-auto-suggestion-debounce-delay 0.3
+;;          minuet-n-completions 1)
+;;  
+;;  (keymap-set minuet-active-mode-map "C-c C-c" #'minuet-accept-suggestion)
+;;  (keymap-set minuet-active-mode-map "C-c C-n" #'minuet-next-suggestion)
+;;  (keymap-set minuet-active-mode-map "C-c C-p" #'minuet-previous-suggestion)
+;;  (keymap-set minuet-active-mode-map "C-g" #'minuet-dismiss-suggestion)
+;;  (keymap-set minuet-active-mode-map "<tab>" #'minuet-accept-suggestion-line))
+;;
+;;
+;;;; Use suggestions only if some resonable conditions are met 
+;;
+;;(defun my-minuet-block-suggestions ()
+;;  "Return nil if we should show suggestions, t (blocked) otherwise.
+;;
+;;;; Resonable conditions:
+;;;; - File must be writable
+;;;; - Cursor must not be at beginning of line
+;;;; - Cursor must be at the end of line (ignoring whitespace)."
+;;  
+;;  (not (and (not buffer-read-only)
+;;            (not (bolp))
+;;            (looking-at-p "\s*$"))))
+;;
+;;(with-eval-after-load "minuet"
+;;  (add-hook 'minuet-auto-suggestion-block-predicates
+;;            #'my-minuet-block-suggestions -100))
+;;
+;;
+;;
+;;;;**********************************************************
